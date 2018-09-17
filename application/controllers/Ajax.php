@@ -17,6 +17,7 @@ class Ajax extends CI_Controller {
         parent::__construct();
         $this->load->model('Subject_model');
         $this->load->model('General_model');
+        $this->load->model('Accounts_model');
     }
 
     public function select_subject() {
@@ -216,7 +217,23 @@ class Ajax extends CI_Controller {
     }
 
     public function select_fees_purpose() {
-        var_dump($_POST);
+    
+        $where = array('program_id' => $this->input->post('program_id', true), 'semester_id' => $this->input->post('semester_id', true), 'session_id' => $this->input->post('session_id', true));
+        $fees_amount_by_semester = $this->General_model->select_any_one_where('fees_amount_by_semester', $where);
+        var_dump($where);
+        exit();
+        $jsonData = array();
+        foreach ($fees_amount_by_semester AS $value) {
+          $account_purpose_list= $this->General_model->select_any_where('account_purpose_list', array('purpose_id' => $value->account_purpose_id));
+            $jsonData[] = array($account_purpose_list['purpose_id'], 'amount' => $value->amount);
+ 
+        }
+        
+        var_dump($jsonData);
+//
+//        echo json_encode($jsonData);
+//        exit;
+        
     }
 
     function fetch() {

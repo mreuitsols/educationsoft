@@ -14,10 +14,10 @@
                 type: "POST",
                 url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
                 data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-                dataType: "text",
-                success: function (html) {
-                    console.log(html);
-//                    $('#curriculum_id').html(html);
+                dataType:'JSON',
+                success: function (dataView) {
+ 
+                    console.log(dataView); 
 
                 }
             });
@@ -31,7 +31,7 @@
                 type: "POST",
                 url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
                 data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-                dataType: "text",
+               dataType:'JSON',
                 success: function (html) {
                     console.log(html);
 //                    $('#curriculum_id').html(html);
@@ -48,7 +48,7 @@
                 type: "POST",
                 url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
                 data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-                dataType: "text",
+               dataType:'JSON',
                 success: function (html) {
                     console.log(html);
 //                    $('#curriculum_id').html(html);
@@ -121,17 +121,7 @@
                                         ?>
                                     </select>  
                                 </div>
-
-                                <div class="form-group">
-                                    <label for="student_id">Student Id</label>
-                                    <input type="text" class="form-control" name="student_id" />
-                                </div> 
-
-                                <div class="form-group">
-                                    <label for="Amount">Amount</label>
-                                    <input type="text" class="form-control" name="amount" />
-                                </div> 
-
+                                <div id="purposes"></div>
 
                                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
                             </form>
