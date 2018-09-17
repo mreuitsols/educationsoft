@@ -11,18 +11,11 @@
  *
  * @author Euitsols
  */
-class Accounts_model extends CI_Model {
+class Library_model extends CI_Model {
 
     public function save_data($tableName, $data) {
         $this->db->insert($tableName, $data);
         return $this->db->insert_id();
-    }
-
-    public function select_sum_where($table, $sumColomn, $where) {
-        $this->db->select_sum($sumColomn);
-        $this->db->where($where);
-        $queryData = $this->db->get($table);
-        return $queryData->result();
     }
 
 }

@@ -147,7 +147,7 @@ class Ajax extends CI_Controller {
                     $theory_total_credit = $theory_total_credit + $theory_SubjectList[$i][$j]['credit'];
                 }
             }
-        } 
+        }
         if (is_array($practical_SubjectList) and sizeof($practical_SubjectList) > 0) {
             for ($i = 0; $i < sizeof($practical_SubjectList); $i++) {
 
@@ -158,8 +158,8 @@ class Ajax extends CI_Controller {
                 }
             }
         }
-       
-        $this->load->view('partialview/curriculum-all-data', array('curriculums' => $curriculums, 'sections' => $data,'total_credit'=>$theory_total_credit,'total_lab'=>$total_lab));
+
+        $this->load->view('partialview/curriculum-all-data', array('curriculums' => $curriculums, 'sections' => $data, 'total_credit' => $theory_total_credit, 'total_lab' => $total_lab));
     }
 
     public function select_teaher() {
@@ -215,6 +215,10 @@ class Ajax extends CI_Controller {
         }
     }
 
+    public function select_fees_purpose() {
+        var_dump($_POST);
+    }
+
     function fetch() {
         $output = '';
         $query = '';
@@ -232,39 +236,39 @@ class Ajax extends CI_Controller {
         }
         echo $output;
     }
-	
-	function ajaxGet(){
-		$this->load->model('General_model');
-		$lastId = isset($_GET['last']) ? $_GET['last'] : 0;
-		   
+
+    function ajaxGet() {
+        $this->load->model('General_model');
+        $lastId = isset($_GET['last']) ? $_GET['last'] : 0;
+
         $students = $this->General_model->slect_any_tableNew('students');
-		$jsonData = array();
-		foreach($students AS $value){
-			$id = $value->s_id;
-			if($lastId < $id){
-                $user_name =   $this->General_model->select_any_where('users',array('user_id'=>$value->user_id)); 
-				$jsonData[] = array('s_id' => $value->s_id,'username'=>$user_name['username'], 'student_id' => $value->student_id, 'student_name' => $value->student_name, 'mobile_no' => $value->mobile_no, 'email' => $value->email);
-			}
-		}
-		//var_dump($jsonData);
-		echo json_encode($jsonData);
-		exit;
-	}
-	
-	function ajaxGetDeactive(){
-		$this->load->model('General_model');
-		$students = $this->General_model->slect_any_tableNew1('students');
-		//var_dump($students);
-		$jsonData = array();
-		foreach($students AS $value){
-            $user_name =   $this->General_model->select_any_where('users',array('user_id'=>$value->user_id));
-			$jsonData[] = array('s_id' => $value->s_id,'username'=>$user_name['username'], 'student_id' => $value->student_id, 'student_name' => $value->student_name, 'mobile_no' => $value->mobile_no, 'email' => $value->email,'status' => $value->status);
-			
-			$this->General_model->update('students', array('s_id' => $value->s_id), array('update_status' => '1'));
-		}
-		
-		echo json_encode($jsonData);
-		exit;
-	}
+        $jsonData = array();
+        foreach ($students AS $value) {
+            $id = $value->s_id;
+            if ($lastId < $id) {
+                $user_name = $this->General_model->select_any_where('users', array('user_id' => $value->user_id));
+                $jsonData[] = array('s_id' => $value->s_id, 'username' => $user_name['username'], 'student_id' => $value->student_id, 'student_name' => $value->student_name, 'mobile_no' => $value->mobile_no, 'email' => $value->email);
+            }
+        }
+        //var_dump($jsonData);
+        echo json_encode($jsonData);
+        exit;
+    }
+
+    function ajaxGetDeactive() {
+        $this->load->model('General_model');
+        $students = $this->General_model->slect_any_tableNew1('students');
+        //var_dump($students);
+        $jsonData = array();
+        foreach ($students AS $value) {
+            $user_name = $this->General_model->select_any_where('users', array('user_id' => $value->user_id));
+            $jsonData[] = array('s_id' => $value->s_id, 'username' => $user_name['username'], 'student_id' => $value->student_id, 'student_name' => $value->student_name, 'mobile_no' => $value->mobile_no, 'email' => $value->email, 'status' => $value->status);
+
+            $this->General_model->update('students', array('s_id' => $value->s_id), array('update_status' => '1'));
+        }
+
+        echo json_encode($jsonData);
+        exit;
+    }
 
 }
