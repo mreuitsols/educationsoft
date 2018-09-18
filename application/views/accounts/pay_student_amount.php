@@ -24,6 +24,28 @@
                         <div class="panel-heading">Payment</div>
                         <div class="panel-body">
                             <form action="<?php echo base_url(); ?>accounts/save_cr_payment" method="post">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>SL</td>
+                                        <td>Fee Purpose</td>
+                                        <td>Amount</td>
+                                    </tr>
+                                    <?php
+                                    $i = 1;
+                                    foreach ($FeepurposeData as $purpose) {
+                                        $feePurpose = $this->General_model->select_any_where('account_purpose_list', array('purpose_id' => $purpose->purpose_id));
+                                        ?>
+                                        <tr>
+                                            <td><?= $i; ?> </td>
+                                            <td><?= $feePurpose['purpose_name']; ?></td>
+                                            <td><?= $purpose->fees_amount; ?></td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    }
+                                    ?>
+                                        <tfoot><tr><th colspan="2">Total : </th><th><?php echo $dueAmount[0]->dr_amount; ?></th></tr></tfoot>
+                                </table>
                                 <div class="form-group">
                                     <label for="totalDue">Total Due Amount</label> 
 
@@ -53,6 +75,7 @@
                         <!-- Default panel contents --> 
                         <div class="panel-heading">Student Details</div>
                         <div class="panel-body">
+
                             <table class="table">
                                 <tr>
                                     <th>Student ID: </th>
@@ -106,18 +129,18 @@
             total = this.value;
         });
         var pay_amount = 0;
-        
-        
+
+
         $("#pay_amount").each(function () {
 
             $(this).keyup(function () {
                 pay_amount = this.value;
                 sum = (total - pay_amount);
-                   $("#total").val(sum);
+                $("#total").val(sum);
             });
-          
+
         });
- 
-       
+
+
     })
 </script>

@@ -1,67 +1,247 @@
 
 <script type="text/javascript">
+    /*
+     
+     $(document).ready(function () {
+     
+     
+     $("#program_id").on("change", function () {
+     var program_id = $('#program_id').val();
+     var semester_id = $('#semester_id').val();
+     var session_id = $('#session_id').val();
+     
+     
+     $.ajax({
+     type: "POST",
+     url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
+     data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
+     dataType: 'text',
+     success: function (dataView) {
+     //                    console.log(html); 
+     var dataJson = JSON.parse(dataView);
+     var lengthJson = JSON.parse(dataView).length;
+     var lastId = document.getElementById('tbodyid');
+     var SL = 1;
+     var chkbox = document.createElement('input');
+     
+     for (var m = 0; m < lengthJson; m++) {
+     // alert(dataJson[m].s_id);
+     var creTr = document.createElement('tr');
+     
+     for (var n = 1; n < 5; n++) {
+     var ctrTd = document.createElement('td');
+     if (n == 1) {
+     ctrTd.innerHTML = SL;
+     } else if (n == 2) {
+     ctrTd.innerHTML = dataJson[m].purpose_name;
+     } else if (n == 3) {
+     ctrTd.innerHTML = dataJson[m].amount;
+     } else if (n == 4) {
+     chkbox.setAttribute('value', dataJson[m].fees_amount_id);
+     chkbox.setAttribute('type', 'checkbox');
+     ctrTd.append(chkbox);
+     }
+     creTr.appendChild(ctrTd);
+     }
+     
+     $('#tbodyid').appendChild(creTr);
+     
+     SL++;
+     }
+     
+     
+     }
+     });
+     });
+     $("#semester_id").on("change", function () {
+     var program_id = $('#program_id').val();
+     var semester_id = $('#semester_id').val();
+     var session_id = $('#session_id').val();
+     
+     $.ajax({
+     type: "POST",
+     url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
+     data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
+     dataType: 'text',
+     success: function (dataView) {
+     //                    console.log(html); 
+     var dataJson = JSON.parse(dataView);
+     var lengthJson = JSON.parse(dataView).length;
+     var lastId = document.getElementById('tbodyid');
+     var SL = 1;
+     var chkbox = document.createElement('input');
+     
+     for (var m = 0; m < lengthJson; m++) {
+     // alert(dataJson[m].s_id);
+     var creTr = document.createElement('tr');
+     
+     for (var n = 1; n < 5; n++) {
+     var ctrTd = document.createElement('td');
+     if (n == 1) {
+     ctrTd.innerHTML = SL;
+     } else if (n == 2) {
+     ctrTd.innerHTML = dataJson[m].purpose_name;
+     } else if (n == 3) {
+     ctrTd.innerHTML = dataJson[m].amount;
+     } else if (n == 4) {
+     chkbox.setAttribute('value', dataJson[m].fees_amount_id);
+     chkbox.setAttribute('type', 'checkbox');
+     ctrTd.append(chkbox);
+     }
+     creTr.appendChild(ctrTd);
+     }
+     
+     $('#tbodyid').html(creTr);
+     
+     SL++;
+     }
+     
+     
+     }
+     });
+     });
+     $("#session_id").on("change", function () {
+     var program_id = $('#program_id').val();
+     var semester_id = $('#semester_id').val();
+     var session_id = $('#session_id').val();
+     
+     $.ajax({
+     type: "POST",
+     url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
+     data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
+     dataType: 'text',
+     success: function (dataView) {
+     //                    console.log(dataView); 
+     var dataJson = JSON.parse(dataView);
+     var lengthJson = JSON.parse(dataView).length;
+     var lastId = document.getElementById('tbodyid');
+     var SL = 1;
+     
+     for (var m = 0; m < lengthJson; m++) {
+     // alert(dataJson[m].s_id);
+     var creTr = document.createElement('tr');
+     
+     for (var n = 1; n < 5; n++) {
+     var ctrTd = document.createElement('td');
+     if (n == 1) {
+     ctrTd.innerHTML = SL;
+     } else if (n == 2) {
+     ctrTd.innerHTML = dataJson[m].purpose_name;
+     } else if (n == 3) {
+     ctrTd.innerHTML = dataJson[m].amount;
+     } else if (n == 4) {
+     var chkbox = document.createElement('input');
+     var chkbox2 = document.createElement('input');
+     //                               ctrTd.innerHTML = '44444';
+     ctrTd.append(chkbox);
+     chkbox.setAttribute('value', dataJson[m].fees_amount_id);
+     chkbox.setAttribute('type', 'checkbox');
+     chkbox.setAttribute('name', 'fees_amount_id[]');
+     ctrTd.append(chkbox2);
+     chkbox2.setAttribute('value', dataJson[m].amount);
+     chkbox2.setAttribute('type', 'hidden');
+     chkbox2.setAttribute('name', 'amount');
+     }
+     creTr.appendChild(ctrTd);
+     }
+     
+     lastId.appendChild(creTr);
+     
+     SL++;
+     }
+     
+     
+     }
+     });
+     });
+     //        
+     
+     
+     
+     });
+     */
 
+    function getFee() {
 
-    $(document).ready(function () {
-
-
-        $("#program_id").on("change", function () {
-            var program_id = $('#program_id').val();
-            var semester_id = $('#semester_id').val();
-            var session_id = $('#session_id').val();
-
+        var program_id = document.getElementById('program_id').value;
+        var semester_id = $('#semester_id').val();
+        var session_id = $('#session_id').val();
+        var tbodyid = document.getElementById('fee_purposeList');
+        tbodyid.innerHTML = '';
+        if (program_id > 0 && semester_id > 0 && session_id > 0) {
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
                 data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-                dataType:'JSON',
+                dataType: 'text',
                 success: function (dataView) {
- 
-                    console.log(dataView); 
+//                    console.log(dataView); 
+                    var dataJson = JSON.parse(dataView);
+                    var lengthJson = JSON.parse(dataView).length;
+                   
+                        var SL = 1;
+                        var creTbl = document.createElement('table');
+                        creTbl.setAttribute('class', 'table table-bordered');
 
+                        var creThead = document.createElement('thead');
+                        var thtr = document.createElement('tr');
+                        var _td = document.createElement('td');
+                        _td.setAttribute('colspan', '3');
+ if (lengthJson > 0) {
+                        _td.innerHTML = "<h3 class='text-center'>Select Fee Purpose Lise</h3>";
+                        thtr.appendChild(_td);
+                        creThead.appendChild(thtr);
+                        creTbl.appendChild(creThead);
+
+                        var creTbody = document.createElement('tbody');
+
+                        for (var m = 0; m < lengthJson; m++) {
+                            // alert(dataJson[m].s_id);
+
+                            var creTr = document.createElement('tr');
+
+                            for (var n = 1; n < 5; n++) {
+                                var ctrTd = document.createElement('td');
+                                if (n == 1) {
+                                    ctrTd.innerHTML = SL;
+                                } else if (n == 2) {
+                                    ctrTd.innerHTML = dataJson[m].purpose_name;
+                                } else if (n == 3) {
+                                    ctrTd.innerHTML = dataJson[m].amount;
+                                } else if (n == 4) {
+                                    var chkbox = document.createElement('input');
+                                    var chkbox2 = document.createElement('input');
+//                               ctrTd.innerHTML = '44444';
+                                    ctrTd.append(chkbox);
+                                    chkbox.setAttribute('value', dataJson[m].purpose_id);
+                                    chkbox.setAttribute('type', 'checkbox');
+                                    chkbox.setAttribute('name', 'purpose_id[]');
+                                    ctrTd.append(chkbox2);
+                                    chkbox2.setAttribute('value', dataJson[m].amount);
+                                    chkbox2.setAttribute('type', 'hidden');
+                                    chkbox2.setAttribute('name', 'amount[]');
+                                }
+                                creTr.appendChild(ctrTd);
+                            }
+                            creTbody.appendChild(creTr);
+
+
+                            SL++;
+                        }
+                        creTbl.appendChild(creTbody);
+                        tbodyid.appendChild(creTbl);
+                    }else{
+                        _td.innerHTML = "<h3 class='text-center'>Data Not Found!</h3>";
+                        thtr.appendChild(_td);
+                        creThead.appendChild(thtr);
+                        creTbl.appendChild(creThead);
+                         tbodyid.appendChild(creTbl);
+                    }
+                    
                 }
             });
-        });
-        $("#semester_id").on("change", function () {
-            var program_id = $('#program_id').val();
-            var semester_id = $('#semester_id').val();
-            var session_id = $('#session_id').val();
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
-                data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-               dataType:'JSON',
-                success: function (html) {
-                    console.log(html);
-//                    $('#curriculum_id').html(html);
-
-                }
-            });
-        });
-        $("#session_id").on("change", function () {
-            var program_id = $('#program_id').val();
-            var semester_id = $('#semester_id').val();
-            var session_id = $('#session_id').val();
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
-                data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-               dataType:'JSON',
-                success: function (html) {
-                    console.log(html);
-//                    $('#curriculum_id').html(html);
-
-                }
-            });
-        });
-//        
-
-
-
-    });
-
+        }
+    }
 </script>
 
 
@@ -96,7 +276,7 @@
 
                                 <div class="form-group">
                                     <label for="program_id">Program Name</label>
-                                    <select class="form-control program_id" id="program_id" name="program_id">
+                                    <select class="form-control program_id" id="program_id" name="program_id" onchange="getFee();">
                                         <option value="">Select Program</option>
                                         <?php for ($i = 0; $i < sizeof($programs); $i++) { ?>
                                             <option value="<?php echo $programs[$i]->program_id; ?>" <?php ?> ><?php echo $programs[$i]->program_name; ?></option><?php }
@@ -105,7 +285,7 @@
                                 </div> 
                                 <div class="form-group">
                                     <label for="semester_id">Semester</label>
-                                    <select class="form-control semester_id" id="semester_id" name="semester_id">
+                                    <select class="form-control semester_id" id="semester_id" name="semester_id" onchange="getFee();">
                                         <option value="">Select Semester</option>
                                         <?php for ($i = 0; $i < sizeof($semesters); $i++) { ?>
                                             <option value="<?php echo $semesters[$i]->semester_id; ?>" <?php ?> ><?php echo $semesters[$i]->semester_name; ?></option><?php }
@@ -114,14 +294,16 @@
                                 </div> 
                                 <div class="form-group">
                                     <label for="session_id">Section</label>
-                                    <select class="form-control section_id" id="session_id" name="session_id">
+                                    <select class="form-control section_id" id="session_id" name="session_id" onchange="getFee();">
                                         <option value="">Select Section</option>
                                         <?php for ($i = 0; $i < sizeof($sections); $i++) { ?>
                                             <option value="<?php echo $sections[$i]->session_id; ?>" <?php ?> ><?php echo $sections[$i]->year; ?></option><?php }
                                         ?>
                                     </select>  
                                 </div>
-                                <div id="purposes"></div>
+                                <div id="fee_purposeList">
+
+                                </div>
 
                                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
                             </form>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2018 at 03:10 PM
+-- Generation Time: Sep 18, 2018 at 03:51 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 7.0.1
 
@@ -746,9 +746,10 @@ CREATE TABLE `fees_amount_by_semester` (
 --
 
 INSERT INTO `fees_amount_by_semester` (`fees_amount_id`, `account_purpose_id`, `program_id`, `semester_id`, `session_id`, `amount`, `created_at`) VALUES
-(1, 1, 2, 2, 2, 200, '2018-09-17 10:03:30'),
-(2, 2, 2, 2, 2, 150, '2018-09-17 10:03:31'),
-(3, 4, 2, 2, 2, 500, '2018-09-17 10:03:31');
+(18, 1, 1, 1, 1, 500, '2018-09-18 13:43:01'),
+(19, 6, 1, 1, 1, 300, '2018-09-18 13:43:01'),
+(20, 2, 1, 1, 1, 500, '2018-09-18 13:43:01'),
+(21, 4, 1, 1, 1, 150, '2018-09-18 13:43:01');
 
 -- --------------------------------------------------------
 
@@ -1154,8 +1155,15 @@ CREATE TABLE `student_account` (
 --
 
 INSERT INTO `student_account` (`student_account_id`, `student_id`, `program_id`, `semester_id`, `session_id`, `student_fees_by_semeste_id`, `dr_amount`, `cr_amount`, `p_date`, `status`, `created_at`) VALUES
-(2, 20181, 1, 1, 1, 1, 850, 0, '0000-00-00 00:00:00', '', '2018-09-17 12:21:39'),
-(4, 20181, 850, 500, 2, 0, 0, 500, '0000-00-00 00:00:00', '', '2018-09-17 12:36:46');
+(14, 20182, 1, 1, 1, 13, 500, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(15, 20182, 1, 1, 1, 14, 300, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(16, 20184, 1, 1, 1, 15, 500, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(17, 20184, 1, 1, 1, 16, 300, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(18, 20185, 1, 1, 1, 17, 500, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(19, 20185, 1, 1, 1, 18, 300, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(20, 1990, 1, 1, 1, 19, 500, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(21, 1990, 1, 1, 1, 20, 300, 0, '0000-00-00 00:00:00', '', '2018-09-18 13:47:48'),
+(22, 20182, 800, 800, 1, 0, 0, 800, '0000-00-00 00:00:00', '', '2018-09-18 13:49:49');
 
 -- --------------------------------------------------------
 
@@ -1165,7 +1173,7 @@ INSERT INTO `student_account` (`student_account_id`, `student_id`, `program_id`,
 
 CREATE TABLE `student_fees_by_semeste` (
   `student_fees_by_semeste_id` int(11) NOT NULL,
-  `fees_amount_by_semester_id` int(11) NOT NULL,
+  `purpose_id` int(11) NOT NULL,
   `program_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
   `session_id` int(11) NOT NULL,
@@ -1179,8 +1187,15 @@ CREATE TABLE `student_fees_by_semeste` (
 -- Dumping data for table `student_fees_by_semeste`
 --
 
-INSERT INTO `student_fees_by_semeste` (`student_fees_by_semeste_id`, `fees_amount_by_semester_id`, `program_id`, `semester_id`, `session_id`, `student_id`, `fees_amount`, `fees_status`, `created_at`) VALUES
-(1, 0, 1, 1, 1, 20181, 850, '', '2018-09-17 12:21:38');
+INSERT INTO `student_fees_by_semeste` (`student_fees_by_semeste_id`, `purpose_id`, `program_id`, `semester_id`, `session_id`, `student_id`, `fees_amount`, `fees_status`, `created_at`) VALUES
+(13, 1, 1, 1, 1, 20182, 500, '', '2018-09-18 13:47:48'),
+(14, 4, 1, 1, 1, 20182, 300, '', '2018-09-18 13:47:48'),
+(15, 1, 1, 1, 1, 20184, 500, '', '2018-09-18 13:47:48'),
+(16, 4, 1, 1, 1, 20184, 300, '', '2018-09-18 13:47:48'),
+(17, 1, 1, 1, 1, 20185, 500, '', '2018-09-18 13:47:48'),
+(18, 4, 1, 1, 1, 20185, 300, '', '2018-09-18 13:47:48'),
+(19, 1, 1, 1, 1, 1990, 500, '', '2018-09-18 13:47:48'),
+(20, 4, 1, 1, 1, 1990, 300, '', '2018-09-18 13:47:48');
 
 -- --------------------------------------------------------
 
@@ -1617,7 +1632,7 @@ ALTER TABLE `student_account`
 --
 ALTER TABLE `student_fees_by_semeste`
   ADD PRIMARY KEY (`student_fees_by_semeste_id`),
-  ADD KEY `fees_amount_by_semester_id` (`fees_amount_by_semester_id`),
+  ADD KEY `fees_amount_by_semester_id` (`purpose_id`),
   ADD KEY `program_id` (`program_id`),
   ADD KEY `semester_id` (`semester_id`),
   ADD KEY `session_id` (`session_id`),
@@ -1765,7 +1780,7 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT for table `fees_amount_by_semester`
 --
 ALTER TABLE `fees_amount_by_semester`
-  MODIFY `fees_amount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `fees_amount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `markdistributions`
 --
@@ -1830,12 +1845,12 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `student_account`
 --
 ALTER TABLE `student_account`
-  MODIFY `student_account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `student_account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `student_fees_by_semeste`
 --
 ALTER TABLE `student_fees_by_semeste`
-  MODIFY `student_fees_by_semeste_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `student_fees_by_semeste_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `subjects`
 --

@@ -220,19 +220,19 @@ class Ajax extends CI_Controller {
     
         $where = array('program_id' => $this->input->post('program_id', true), 'semester_id' => $this->input->post('semester_id', true), 'session_id' => $this->input->post('session_id', true));
         $fees_amount_by_semester = $this->General_model->select_any_one_where('fees_amount_by_semester', $where);
-        var_dump($where);
-        exit();
+         
         $jsonData = array();
         foreach ($fees_amount_by_semester AS $value) {
+            
           $account_purpose_list= $this->General_model->select_any_where('account_purpose_list', array('purpose_id' => $value->account_purpose_id));
-            $jsonData[] = array($account_purpose_list['purpose_id'], 'amount' => $value->amount);
+            $jsonData[] = array('purpose_id'=>$account_purpose_list['purpose_id'],'purpose_name'=>$account_purpose_list['purpose_name'], 'amount' => $value->amount);
  
         }
         
-        var_dump($jsonData);
+//        var_dump($jsonData);
 //
-//        echo json_encode($jsonData);
-//        exit;
+        echo json_encode($jsonData);
+        exit;
         
     }
 

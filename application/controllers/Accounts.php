@@ -87,8 +87,6 @@ class Accounts extends CI_Controller {
         }
     }
 
-
-
     public function add_studnet_fees_by_semester() {
         $data['semesters'] = $this->General_model->slect_any_table('semesters');
         $data['sections'] = $this->General_model->slect_any_table('sessions');
@@ -103,28 +101,52 @@ class Accounts extends CI_Controller {
 
     public function save_st_fees_by_semester() {
 
-        $data['program_id'] = $this->input->post('program_id', true);
-        $data['semester_id'] = $this->input->post('semester_id', true);
-        $data['session_id'] = $this->input->post('session_id', true);
-        $data['student_id'] = $this->input->post('student_id', true);
+        $program_id = $this->input->post('program_id', true);
+        $semester_id = $this->input->post('semester_id', true);
+        $session_id = $this->input->post('session_id', true);
+//        $student_id = $this->input->post('student_id', true);
 
-        $data['fees_amount'] = $this->input->post('amount', true);
+        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id);
 
-        $insertId = $this->Accounts_model->save_data('student_fees_by_semeste', $data);
+        $allStudentData = $this->General_model->select_any_one_where('students', $where);
+        
+        if ($allStudentData == NULL) {
+            $this->session->set_flashdata('error', 'Something Error! Please try again');
+            redirect('accounts/add_studnet_fees_by_semester');
+        }
+        foreach ($allStudentData as $stinfo) {
+            $data['student_id'] = $stinfo->student_id;
+            $data['program_id'] = $program_id;
+            $data['semester_id'] = $semester_id;
+            $data['session_id'] = $session_id;
 
-        $data2['student_id'] = $this->input->post('student_id', true);
-        $data2['dr_amount'] = $this->input->post('amount', true);
-        $data2['program_id'] = $this->input->post('program_id', true);
-        $data2['semester_id'] = $this->input->post('semester_id', true);
-        $data2['session_id'] = $this->input->post('session_id', true);
+            $data2['student_id'] = $stinfo->student_id;
+            $data2['program_id'] = $program_id;
+            $data2['semester_id'] = $semester_id;
+            $data2['session_id'] = $session_id;
+            $pIds = $this->input->post('purpose_id');
+            $pAmount = $this->input->post('amount');
+            for ($i = 0; $i < sizeof($pIds); $i++) {
+                $data['purpose_id'] = $pIds[$i];
+                $data['fees_amount'] = $pAmount[$i];
+                $insertId = $this->Accounts_model->save_data('student_fees_by_semeste', $data);
 
-        $data2['student_fees_by_semeste_id'] = $insertId;
+                $data2['dr_amount'] = $this->input->post('amount')[$i];
+                $data2['student_fees_by_semeste_id'] = $insertId;
+                $insertId = $this->Accounts_model->save_data('student_account', $data2);
+            }
+        }
 
-        $insertId = $this->Accounts_model->save_data('student_account', $data2);
+        if ($allStudentData > 0) {
+            $this->session->set_flashdata('success', 'Data add successfull');
+            redirect('accounts/add_studnet_fees_by_semester');
+        } else {
+            $this->session->set_flashdata('error', 'Something Error! Please try again');
+            redirect('accounts/add_studnet_fees_by_semester');
+        }
     }
 
-    
-        public function addpayment() {
+    public function addpayment() {
         $data['semesters'] = $this->General_model->slect_any_table('semesters');
         $data['sections'] = $this->General_model->slect_any_table('sessions');
         $data['programs'] = $this->General_model->slect_any_table('programs');
@@ -135,24 +157,29 @@ class Accounts extends CI_Controller {
         $data['title'] = 'Add Student Fees by Semester';
         $this->load->view('layout', $data);
     }
-    
+
     public function search_st_data() {
 
         $student_id = $this->input->post('student_id');
         $where = array('student_id' => $student_id);
         $studentData = $this->General_model->select_any_where('students', $where);
 
+        if ($studentData == NULL) {
+            $this->session->set_flashdata('error', 'Student ID Not Found');
+            redirect('accounts/addpayment');
+        }
+
         $data['student_info'] = $studentData;
 
-//        $where = array('program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id']);
+
         $sumColumn = 'dr_amount';
         $dueAmount = $this->Accounts_model->select_sum_where('student_account', 'dr_amount', $where);
         $data['dueAmount'] = $dueAmount;
 
-        if ($dueAmount[0]->dr_amount == NULL) {
-            $this->session->set_flashdata('error', 'Record Not Found!');
-            redirect('accounts/add_studnet_fees_by_semester');
-        }
+        $where = array('student_id' => $student_id, 'program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id']);
+
+        $data['FeepurposeData'] = $this->General_model->select_any_one_where('student_fees_by_semeste', $where);
+
         $data['sidebar'] = 'sidebar/left-sidebar';
         $data['page'] = 'accounts/pay_student_amount';
         $data['title'] = 'Add Student Fees by Semester';
@@ -166,13 +193,13 @@ class Accounts extends CI_Controller {
         $data['session_id'] = $this->input->post('session_id', true);
         $data['student_id'] = $this->input->post('student_id', true);
         $data['cr_amount'] = $this->input->post('pay_amount', true);
-        
+
         $insertId = $this->Accounts_model->save_data('student_account', $data);
-        
-          if ($insertId) {
+
+        if ($insertId) {
             $this->session->set_flashdata('success', 'Payment add successfull');
             redirect('accounts/addpayment');
-        }else{
+        } else {
             $this->session->set_flashdata('error', 'Something Error! Please try again');
             redirect('accounts/addpayment');
         }
