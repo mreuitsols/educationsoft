@@ -212,26 +212,27 @@
 
                             <li><a href="<?php echo base_url(); ?>accounts/add_purpose"><i class="fa fa-plus"></i> Fee Setup</a></li> 
                             <li><a href="<?php echo base_url(); ?>accounts/add_fees_amount"><i class="fa fa-plus"></i> Fees Amount by Semester</a></li> 
-                            <li><a href="<?php echo base_url(); ?>accounts/add_studnet_fees_by_semester"><i class="fa fa-plus"></i> Add Student Fees by Semester</a></li> 
+                            <li><a href="<?php echo base_url(); ?>accounts/add_student_fees_by_semester"><i class="fa fa-plus"></i> Add Student Fees by Semester</a></li> 
                             <li><a href="<?php echo base_url(); ?>accounts/addpayment"><i class="fa fa-plus"></i> Payment</a></li> 
                         </ul>
                     </li>
 
 
                
+                  
                    <li class="">
-                        <a href="#">
-                            <i class="fa fa-money"></i>
+                        <a href="javascript:void(0)">
+                            <i class="fa fa-book"></i>
                             Library 
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
 
-                            <li><a href="#"><i class="fa fa-plus"></i>Add new Book</a></li> 
-                            <li><a href="<?php echo base_url(); ?>library/book_category"><i class="fa fa-plus"></i>Book Categories</a></li> 
+                            <li><a href="<?php echo base_url(); ?>library/book"><i class="fa fa-plus"></i>Add new Book</a></li> 
+                            <li><a href="<?php echo base_url(); ?>library/categories"><i class="fa fa-plus"></i>Book Categories</a></li> 
                            <li><a href="<?php echo base_url(); ?>library/book_subcategory"><i class="fa fa-plus"></i>Book subCategories</a></li> 
                           <li><a href="<?php echo base_url(); ?>library/publishers"><i class="fa fa-plus"></i>Publishers</a></li> 
-                            <li><a href="#"><i class="fa fa-plus"></i>Authors</a></li> 
+                            <li><a href="<?php echo base_url(); ?>library/authors"><i class="fa fa-plus"></i>Authors</a></li> 
                         </ul>
                     </li>
 

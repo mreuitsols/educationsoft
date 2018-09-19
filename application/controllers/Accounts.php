@@ -63,19 +63,35 @@ class Accounts extends CI_Controller {
 
     public function save_fees_amount() {
 
-        $data['program_id'] = $this->input->post('program_id', true);
-        $data['semester_id'] = $this->input->post('semester_id', true);
-        $data['session_id'] = $this->input->post('session_id', true);
-        $total_amount = 0;
-        for ($i = 0; $i < sizeof($this->input->post('purpose_id', true)); $i++) {
 
-            $data['account_purpose_id'] = $this->input->post('purpose_id', true)[$i];
-            $data['amount'] = $this->input->post('amount', true)[$i];
-            $total_amount = $total_amount + $this->input->post('amount', true)[$i];
-            $insertData = $this->Accounts_model->save_data('fees_amount_by_semester', $data);
+        $program_id = $this->input->post('program_id', true);
+        $data['program_id'] = $program_id;
+        $semester_id = $this->input->post('semester_id', true);
+        $data['semester_id'] = $semester_id;
+        $session_id = $this->input->post('session_id', true);
+        $data['session_id'] = $session_id;
+        $total_amount = 0;
+        $pIds = $this->input->post('purpose_id', true);
+        $amount = $this->input->post('amount', true);
+        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id);
+        $this->General_model->update('fees_amount_by_semester', $where, array('status' => '1'));
+        $insertData = '';
+        for ($i = 0; $i < sizeof($pIds); $i++) {
+
+            $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id, 'account_purpose_id' => $pIds[$i]);
+            $fees_amount_by_semester = $this->General_model->select_any_where('fees_amount_by_semester', $where);
+
+            if (is_array($fees_amount_by_semester) && sizeof($fees_amount_by_semester) > 0) {
+
+                $where = array('fees_amount_id' => $fees_amount_by_semester['fees_amount_id']);
+                $insertData = $this->General_model->update('fees_amount_by_semester', $where, array('amount' => $amount[$i], 'status' => '1'));
+            } else {
+                $data['account_purpose_id'] = $pIds[$i];
+                $data['amount'] = $amount[$i];
+                $data['status'] = 1;
+                $insertData = $this->Accounts_model->save_data('fees_amount_by_semester', $data);
+            }
         }
-        $data2['dr_amount'] = $total_amount;
-        $insertData = $this->Accounts_model->save_data('student_account', $data2);
 
 
         if ($insertData) {
@@ -87,14 +103,14 @@ class Accounts extends CI_Controller {
         }
     }
 
-    public function add_studnet_fees_by_semester() {
+    public function add_student_fees_by_semester() {
         $data['semesters'] = $this->General_model->slect_any_table('semesters');
         $data['sections'] = $this->General_model->slect_any_table('sessions');
         $data['programs'] = $this->General_model->slect_any_table('programs');
         $data['fee_purpose'] = $this->General_model->slect_any_table('account_purpose_list');
 
         $data['sidebar'] = 'sidebar/left-sidebar';
-        $data['page'] = 'accounts/add_studnet_fees_by_semester';
+        $data['page'] = 'accounts/add_student_fees_by_semester';
         $data['title'] = 'Add Student Fees by Semester';
         $this->load->view('layout', $data);
     }
@@ -104,45 +120,37 @@ class Accounts extends CI_Controller {
         $program_id = $this->input->post('program_id', true);
         $semester_id = $this->input->post('semester_id', true);
         $session_id = $this->input->post('session_id', true);
-//        $student_id = $this->input->post('student_id', true);
 
-        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id);
+        $data['program_id'] = $program_id;
+        $data['semester_id'] = $semester_id;
+        $data['session_id'] = $session_id;
+        $update_where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id);
+        $this->General_model->update('student_fees_by_semeste', $update_where, array('status' => '0'));
 
-        $allStudentData = $this->General_model->select_any_one_where('students', $where);
-        
-        if ($allStudentData == NULL) {
-            $this->session->set_flashdata('error', 'Something Error! Please try again');
-            redirect('accounts/add_studnet_fees_by_semester');
-        }
-        foreach ($allStudentData as $stinfo) {
-            $data['student_id'] = $stinfo->student_id;
-            $data['program_id'] = $program_id;
-            $data['semester_id'] = $semester_id;
-            $data['session_id'] = $session_id;
+        $pIds = $this->input->post('purpose_id');
+        $pAmount = $this->input->post('amount');
 
-            $data2['student_id'] = $stinfo->student_id;
-            $data2['program_id'] = $program_id;
-            $data2['semester_id'] = $semester_id;
-            $data2['session_id'] = $session_id;
-            $pIds = $this->input->post('purpose_id');
-            $pAmount = $this->input->post('amount');
-            for ($i = 0; $i < sizeof($pIds); $i++) {
+        $insertId = [];
+        for ($i = 0; $i < sizeof($pIds); $i++) {
+
+            $where = array('program_id' => $this->input->post('program_id', true), 'semester_id' => $this->input->post('semester_id', true), 'session_id' => $this->input->post('session_id', true), 'purpose_id' => $pIds[$i]);
+            $student_fees_by_semeste = $this->General_model->select_any_where('student_fees_by_semeste', $where);
+            if (is_array($student_fees_by_semeste) && sizeof($student_fees_by_semeste) > 0) {
+
+                $this->General_model->update('student_fees_by_semeste', $where, array('status' => '1'));
+            } else {
                 $data['purpose_id'] = $pIds[$i];
                 $data['fees_amount'] = $pAmount[$i];
-                $insertId = $this->Accounts_model->save_data('student_fees_by_semeste', $data);
-
-                $data2['dr_amount'] = $this->input->post('amount')[$i];
-                $data2['student_fees_by_semeste_id'] = $insertId;
-                $insertId = $this->Accounts_model->save_data('student_account', $data2);
+                $insertId[] = $this->Accounts_model->save_data('student_fees_by_semeste', $data);
             }
         }
 
-        if ($allStudentData > 0) {
+        if ($insertId > 0) {
             $this->session->set_flashdata('success', 'Data add successfull');
-            redirect('accounts/add_studnet_fees_by_semester');
+            redirect('accounts/add_student_fees_by_semester');
         } else {
             $this->session->set_flashdata('error', 'Something Error! Please try again');
-            redirect('accounts/add_studnet_fees_by_semester');
+            redirect('accounts/add_student_fees_by_semester');
         }
     }
 
@@ -176,9 +184,12 @@ class Accounts extends CI_Controller {
         $dueAmount = $this->Accounts_model->select_sum_where('student_account', 'dr_amount', $where);
         $data['dueAmount'] = $dueAmount;
 
-        $where = array('student_id' => $student_id, 'program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id']);
+        $where = array('program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id'], 'status' => 1);
 
         $data['FeepurposeData'] = $this->General_model->select_any_one_where('student_fees_by_semeste', $where);
+
+        $where = array('program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id'], 'student_id' => $student_id);
+        $data['pay_amount'] = $this->Accounts_model->select_sum_where('student_account', 'cr_amount', $where);
 
         $data['sidebar'] = 'sidebar/left-sidebar';
         $data['page'] = 'accounts/pay_student_amount';
@@ -188,10 +199,28 @@ class Accounts extends CI_Controller {
 
     public function save_cr_payment() {
 
-        $data['program_id'] = $this->input->post('totalDue', true);
-        $data['semester_id'] = $this->input->post('pay_amount', true);
+        $data['program_id'] = $this->input->post('program_id', true);
+        $data['semester_id'] = $this->input->post('semester_id', true);
         $data['session_id'] = $this->input->post('session_id', true);
         $data['student_id'] = $this->input->post('student_id', true);
+        $data['dr_amount'] = $this->input->post('totalDue', true);
+
+
+
+
+        $where = array('program_id' => $this->input->post('program_id', true), 'semester_id' => $this->input->post('semester_id', true), 'session_id' => $this->input->post('session_id', true), 'student_id' => $this->input->post('student_id', true));
+        $studentBalance = $this->General_model->select_any_where('student_dr_account', $where);
+
+        if (is_array($studentBalance) && sizeof($studentBalance) > 0) {
+            $where = array('program_id' => $this->input->post('program_id', true), 'semester_id' => $this->input->post('semester_id', true), 'session_id' => $this->input->post('session_id', true), 'dr_id' => $studentBalance['dr_id']);
+            $this->General_model->update('student_dr_account', $where, array('dr_amount' => $this->input->post('totalDue', true)));
+        } else {
+            $insertId = $this->Accounts_model->save_data('student_dr_account', $data);
+        }
+
+
+        $data['dr_amount'] = 0;
+
         $data['cr_amount'] = $this->input->post('pay_amount', true);
 
         $insertId = $this->Accounts_model->save_data('student_account', $data);

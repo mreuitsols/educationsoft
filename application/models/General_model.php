@@ -18,18 +18,18 @@ class General_model extends CI_Model {
         return $queryData->result();
     }
 
-	public function slect_any_tableNew($table) {
+    public function slect_any_tableNew($table) {
         $this->db->where('update_status', '1');
-		$queryData = $this->db->get($table);
+        $queryData = $this->db->get($table);
         return $queryData->result();
     }
-	
-	public function slect_any_tableNew1($table) {
+
+    public function slect_any_tableNew1($table) {
         $this->db->where('update_status', '0');
-		$queryData = $this->db->get($table);
+        $queryData = $this->db->get($table);
         return $queryData->result();
     }
-	
+
     public function select_any_where($table, $where) {
         $this->db->where($where);
         $queryData = $this->db->get($table);
@@ -70,7 +70,7 @@ class General_model extends CI_Model {
 
     public function update($table, $where, $data) {
         $this->db->where($where);
-        $this->db->update($table, $data);
+        return $this->db->update($table, $data);
     }
 
     public function delete($table, $where) {
@@ -88,7 +88,7 @@ class General_model extends CI_Model {
         $this->db->from("students");
         if ($query != '') {
             $this->db->like('student_id', $query);
-            $this->db->or_like('student_id', $query); 
+            $this->db->or_like('student_id', $query);
         }
         $this->db->order_by('student_id', 'ASC');
         return $this->db->get();

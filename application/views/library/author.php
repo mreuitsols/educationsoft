@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Category</h1>
+                <h1 class="page-header">Author</h1>
                 <div class="col-md-4">  
                     <?php if ($this->session->flashdata('success')) { ?>
                         <div class="alert alert-success alert-dismissable">
@@ -18,52 +18,55 @@
                     <?php } ?>  
                     <div class="panel panel-default">
                         <!-- Default panel contents --> 
-                        <div class="panel-heading">Add Category</div>
+                        <div class="panel-heading">Add New Author</div>
                         <div class="panel-body">
                             <form action="" method="post">
                                 <div class="form-group">
-                                    <label for="book_cat_name">Category name</label>
-                                    <input type="text" value="<?= $name_category; ?>" name="book_cat_name" class="form-control" />
-                                </div> 
+                                    <label for="author_name">Author name</label>
+                                    <input type="text" name="author_name" value="<?= $name_autor;?>" id="author_name" class="form-control" />
+                                </div>   
                                 <div class="form-group">
-                                    <label for="remarks">Remarks</label>
-                                    <textarea class="form-control" name="remarks"><?= $cat_remarks; ?> </textarea>
+                                    <label for="author_details">Details</label>
+                                    <textarea class="form-control" name="author_details"><?= $name_detaiils;?></textarea>
                                 </div>  
-                                <button type="submit" name="cat_submit" class="btn btn-primary mb-2">Submit</button>
+                                <button type="submit" name="author_submit" class="btn btn-primary mb-2">Submit</button>
                             </form>
                         </div> 
                     </div>
                 </div> 
                 <div class="col-md-8">
+                   
                     <table class="table table-bordered">
                         <tr>
                             <th>SL</th>
-                            <th>Name Of Category</th>
-                            <th>Remarks</th>
-                            <th width="150">Action</th>
+                            <th>Name</th>
+                            <th>Author Details</th>
+                            <th>Action</th>
                         </tr>
                         <?php
-                        $total = 0;
-                        for ($i = 0; $i < sizeof($categorylist); $i++) {
+                        $i=0;
+                         foreach ($authorlist as $single_list) {
+
+                            $i++;
+                                                            
                             ?> 
                             <tr>
-                                <?php $id = $categorylist[$i]->book_catid; ?>
-                                <td><?php
-                                    echo $i + 1;
-                                    $total = $total + 1;
-                                    ?></td>
-                                <td><?php echo $categorylist[$i]->book_cat_name; ?></td>
-                                <td><?php echo $categorylist[$i]->remarks; ?></td>
+                                <td>
+                                    <?= $i?>
+                                    
+                                </td>
+                                <td><?php echo $single_list->author_name; ?></td>
+                                <td><?php echo $single_list->author_details; ?></td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                                        <a href="<?= base_url() ?>library/categories/<?= $id ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                        <a href="<?= base_url() ?>library/categories/<?= $id ?>" class="btn btn-danger btn-xs" onclick="confirm('Are you want to delete this item?')"><i class="fa fa-trash"></i> Delete</a>
+                                        <a href="<?= base_url() ?>library/authors/<?= $single_list->author_id; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                         <a href="<?= base_url() ?>library/delete_author/<?= $single_list->author_id; ?>" class="btn btn-danger btn-xs" onclick="confirm('Are you want to delete this item?')"><i class="fa fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr> 
                         <?php } ?>
                         <tr>
-                            <th colspan="2">Total Category</th><td colspan="3"><?php echo $total; ?></td>
+                            <th colspan="2">Total Author</th><td colspan="5"><?php echo $i; ?></td>
                         </tr>
                     </table>
                 </div>

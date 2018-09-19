@@ -23,33 +23,40 @@
                         <!-- Default panel contents --> 
                         <div class="panel-heading">Payment</div>
                         <div class="panel-body">
-                            <form action="<?php echo base_url(); ?>accounts/save_cr_payment" method="post">
+                            <form name="listForm" action="<?php echo base_url(); ?>accounts/save_cr_payment" method="post">
                                 <table class="table table-bordered">
                                     <tr>
-                                        <td>SL</td>
-                                        <td>Fee Purpose</td>
-                                        <td>Amount</td>
+                                        <th width="40">SL</th>
+                                        <th>Fee Purpose</th>
+                                        <th width="100">Amount</th>
+                                        <!--<td>Amount</td>-->
                                     </tr>
                                     <?php
                                     $i = 1;
+                                    $totalFees = 0;
                                     foreach ($FeepurposeData as $purpose) {
                                         $feePurpose = $this->General_model->select_any_where('account_purpose_list', array('purpose_id' => $purpose->purpose_id));
                                         ?>
                                         <tr>
                                             <td><?= $i; ?> </td>
                                             <td><?= $feePurpose['purpose_name']; ?></td>
-                                            <td><?= $purpose->fees_amount; ?></td>
+                                            <td><?php
+                                                echo $purpose->fees_amount;
+                                                $totalFees = $totalFees + $purpose->fees_amount;
+                                                ?></td>
+                                            <!--<td> <input name="choice" type="checkbox" onclick="checkboxes();" value="<?= $purpose->fees_amount; ?>" /></td>-->
                                         </tr>
                                         <?php
                                         $i++;
                                     }
                                     ?>
-                                        <tfoot><tr><th colspan="2">Total : </th><th><?php echo $dueAmount[0]->dr_amount; ?></th></tr></tfoot>
+                                    <tfoot><tr><th colspan="2">Total : </th><th colspan=""><?php echo $totalFees; ?></th></tr></tfoot>
                                 </table>
                                 <div class="form-group">
                                     <label for="totalDue">Total Due Amount</label> 
-
-                                    <input type="text" id="totalDue" name="totalDue" readonly="" value="<?php echo $dueAmount[0]->dr_amount; ?>" class="form-control" />
+                                    <!--<input type="text" value="" id="dueTotal" />-->
+                                    <input type="text" id="totalDue" name="totalDue" readonly="" value="<?php echo $totalFees - $pay_amount[0]->cr_amount; ?>" class="form-control" />
+                                   
                                     <input type="hidden" name="student_id" value="<?php echo $student_info['student_id']; ?>" class="form-control" id="student_id" /> 
                                     <input type="hidden" name="program_id" value="<?php echo $student_info['program_id']; ?>" class="form-control" id="program_id" /> 
                                     <input type="hidden" name="semester_id"  value="<?php echo $student_info['semester_id']; ?>" class="form-control" id="semester_id" /> 
@@ -58,7 +65,7 @@
 
                                 <div class="form-group">
                                     <label for="ProgramName">Pay Amount</label>
-                                    <input type="text" name="pay_amount" class="form-control" id="pay_amount" /> 
+                                    <input type="text" name="pay_amount" class="form-control" id="pay_amount" value="0"/> 
                                 </div>  
 
                                 <div class="form-group">
@@ -107,6 +114,10 @@
                                         ?></td>  
                                 </tr>
                             </table>
+                            <h4>Payment Status:</h4>
+                            <p>Payable Amount : <?php echo number_format($totalFees,2); ?> TK </p>
+                            <p>Paid : <?php if($pay_amount[0]->cr_amount > 0){ echo number_format($pay_amount[0]->cr_amount,2); }else{    echo number_format(0,2);} ?> TK</p>
+                            <p>Unpaid : <?php echo number_format($totalFees - $pay_amount[0]->cr_amount,2); ?> TK</p>
                         </div> 
                     </div>
 
@@ -121,6 +132,19 @@
 
 
 <script>
+//    function checkboxes() {
+//        addon = 0;
+//        totalInput=document.getElementsByName("choice");
+//        for (i = 0; i < totalInput.length; i++)
+//        {
+//            if (totalInput[i].checked == true)
+//            {
+//                addon += parseInt(totalInput[i].value, 10);
+//            }
+//        } 
+//        document.getElementById('dueTotal').value = addon;
+//    }
+
     $(document).ready(function () {
 
         var total = 0;

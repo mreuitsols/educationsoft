@@ -1,172 +1,13 @@
 
 <script type="text/javascript">
-    /*
-     
-     $(document).ready(function () {
-     
-     
-     $("#program_id").on("change", function () {
-     var program_id = $('#program_id').val();
-     var semester_id = $('#semester_id').val();
-     var session_id = $('#session_id').val();
-     
-     
-     $.ajax({
-     type: "POST",
-     url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
-     data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-     dataType: 'text',
-     success: function (dataView) {
-     //                    console.log(html); 
-     var dataJson = JSON.parse(dataView);
-     var lengthJson = JSON.parse(dataView).length;
-     var lastId = document.getElementById('tbodyid');
-     var SL = 1;
-     var chkbox = document.createElement('input');
-     
-     for (var m = 0; m < lengthJson; m++) {
-     // alert(dataJson[m].s_id);
-     var creTr = document.createElement('tr');
-     
-     for (var n = 1; n < 5; n++) {
-     var ctrTd = document.createElement('td');
-     if (n == 1) {
-     ctrTd.innerHTML = SL;
-     } else if (n == 2) {
-     ctrTd.innerHTML = dataJson[m].purpose_name;
-     } else if (n == 3) {
-     ctrTd.innerHTML = dataJson[m].amount;
-     } else if (n == 4) {
-     chkbox.setAttribute('value', dataJson[m].fees_amount_id);
-     chkbox.setAttribute('type', 'checkbox');
-     ctrTd.append(chkbox);
-     }
-     creTr.appendChild(ctrTd);
-     }
-     
-     $('#tbodyid').appendChild(creTr);
-     
-     SL++;
-     }
-     
-     
-     }
-     });
-     });
-     $("#semester_id").on("change", function () {
-     var program_id = $('#program_id').val();
-     var semester_id = $('#semester_id').val();
-     var session_id = $('#session_id').val();
-     
-     $.ajax({
-     type: "POST",
-     url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
-     data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-     dataType: 'text',
-     success: function (dataView) {
-     //                    console.log(html); 
-     var dataJson = JSON.parse(dataView);
-     var lengthJson = JSON.parse(dataView).length;
-     var lastId = document.getElementById('tbodyid');
-     var SL = 1;
-     var chkbox = document.createElement('input');
-     
-     for (var m = 0; m < lengthJson; m++) {
-     // alert(dataJson[m].s_id);
-     var creTr = document.createElement('tr');
-     
-     for (var n = 1; n < 5; n++) {
-     var ctrTd = document.createElement('td');
-     if (n == 1) {
-     ctrTd.innerHTML = SL;
-     } else if (n == 2) {
-     ctrTd.innerHTML = dataJson[m].purpose_name;
-     } else if (n == 3) {
-     ctrTd.innerHTML = dataJson[m].amount;
-     } else if (n == 4) {
-     chkbox.setAttribute('value', dataJson[m].fees_amount_id);
-     chkbox.setAttribute('type', 'checkbox');
-     ctrTd.append(chkbox);
-     }
-     creTr.appendChild(ctrTd);
-     }
-     
-     $('#tbodyid').html(creTr);
-     
-     SL++;
-     }
-     
-     
-     }
-     });
-     });
-     $("#session_id").on("change", function () {
-     var program_id = $('#program_id').val();
-     var semester_id = $('#semester_id').val();
-     var session_id = $('#session_id').val();
-     
-     $.ajax({
-     type: "POST",
-     url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
-     data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
-     dataType: 'text',
-     success: function (dataView) {
-     //                    console.log(dataView); 
-     var dataJson = JSON.parse(dataView);
-     var lengthJson = JSON.parse(dataView).length;
-     var lastId = document.getElementById('tbodyid');
-     var SL = 1;
-     
-     for (var m = 0; m < lengthJson; m++) {
-     // alert(dataJson[m].s_id);
-     var creTr = document.createElement('tr');
-     
-     for (var n = 1; n < 5; n++) {
-     var ctrTd = document.createElement('td');
-     if (n == 1) {
-     ctrTd.innerHTML = SL;
-     } else if (n == 2) {
-     ctrTd.innerHTML = dataJson[m].purpose_name;
-     } else if (n == 3) {
-     ctrTd.innerHTML = dataJson[m].amount;
-     } else if (n == 4) {
-     var chkbox = document.createElement('input');
-     var chkbox2 = document.createElement('input');
-     //                               ctrTd.innerHTML = '44444';
-     ctrTd.append(chkbox);
-     chkbox.setAttribute('value', dataJson[m].fees_amount_id);
-     chkbox.setAttribute('type', 'checkbox');
-     chkbox.setAttribute('name', 'fees_amount_id[]');
-     ctrTd.append(chkbox2);
-     chkbox2.setAttribute('value', dataJson[m].amount);
-     chkbox2.setAttribute('type', 'hidden');
-     chkbox2.setAttribute('name', 'amount');
-     }
-     creTr.appendChild(ctrTd);
-     }
-     
-     lastId.appendChild(creTr);
-     
-     SL++;
-     }
-     
-     
-     }
-     });
-     });
-     //        
-     
-     
-     
-     });
-     */
 
     function getFee() {
 
         var program_id = document.getElementById('program_id').value;
-        var semester_id = $('#semester_id').val();
-        var session_id = $('#session_id').val();
+        var semester_id = document.getElementById('semester_id').value;
+        var session_id = document.getElementById('session_id').value;
         var tbodyid = document.getElementById('fee_purposeList');
+        
         tbodyid.innerHTML = '';
         if (program_id > 0 && semester_id > 0 && session_id > 0) {
             $.ajax({
@@ -175,32 +16,33 @@
                 data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
                 dataType: 'text',
                 success: function (dataView) {
-//                    console.log(dataView); 
+
                     var dataJson = JSON.parse(dataView);
                     var lengthJson = JSON.parse(dataView).length;
-                   
-                        var SL = 1;
-                        var creTbl = document.createElement('table');
-                        creTbl.setAttribute('class', 'table table-bordered');
 
-                        var creThead = document.createElement('thead');
-                        var thtr = document.createElement('tr');
-                        var _td = document.createElement('td');
-                        _td.setAttribute('colspan', '3');
- if (lengthJson > 0) {
-                        _td.innerHTML = "<h3 class='text-center'>Select Fee Purpose Lise</h3>";
+                    var SL = 1;
+                    var creTbl = document.createElement('table');
+                    creTbl.setAttribute('class', 'table table-bordered');
+
+                    var creThead = document.createElement('thead');
+                    var thtr = document.createElement('tr');
+                    var _td = document.createElement('td');
+                    _td.setAttribute('colspan', '3');
+                    if (lengthJson > 0) {
+                        _td.innerHTML = "<h3 class='text-center'>Select Fee Purpose List</h3>";
                         thtr.appendChild(_td);
                         creThead.appendChild(thtr);
                         creTbl.appendChild(creThead);
 
                         var creTbody = document.createElement('tbody');
 
-                        for (var m = 0; m < lengthJson; m++) {
+                        for (var m = 0; m < dataJson.length; m++) {
                             // alert(dataJson[m].s_id);
 
                             var creTr = document.createElement('tr');
 
                             for (var n = 1; n < 5; n++) {
+
                                 var ctrTd = document.createElement('td');
                                 if (n == 1) {
                                     ctrTd.innerHTML = SL;
@@ -211,15 +53,22 @@
                                 } else if (n == 4) {
                                     var chkbox = document.createElement('input');
                                     var chkbox2 = document.createElement('input');
-//                               ctrTd.innerHTML = '44444';
+
                                     ctrTd.append(chkbox);
                                     chkbox.setAttribute('value', dataJson[m].purpose_id);
                                     chkbox.setAttribute('type', 'checkbox');
                                     chkbox.setAttribute('name', 'purpose_id[]');
+
+                                    var chekd = dataJson[m].check;
+                                    if (chekd == 'checked') {
+                                        chkbox.setAttribute('checked', 'checked');
+                                    }
+
                                     ctrTd.append(chkbox2);
                                     chkbox2.setAttribute('value', dataJson[m].amount);
                                     chkbox2.setAttribute('type', 'hidden');
                                     chkbox2.setAttribute('name', 'amount[]');
+
                                 }
                                 creTr.appendChild(ctrTd);
                             }
@@ -230,14 +79,14 @@
                         }
                         creTbl.appendChild(creTbody);
                         tbodyid.appendChild(creTbl);
-                    }else{
+                    } else {
                         _td.innerHTML = "<h3 class='text-center'>Data Not Found!</h3>";
                         thtr.appendChild(_td);
                         creThead.appendChild(thtr);
                         creTbl.appendChild(creThead);
-                         tbodyid.appendChild(creTbl);
+                        tbodyid.appendChild(creTbl);
                     }
-                    
+
                 }
             });
         }

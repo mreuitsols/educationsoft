@@ -18,4 +18,32 @@ class Library_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+     public function autor_search($id) {
+        if ($id > 0){
+         $query = $this->db->get_where('books_author', array('author_id' => $id));
+            if($query->num_rows() == 1){
+                return $query->result_array();
+            }else{
+                return array();
+            }
+        }else{
+            return array();
+        }
+       
+    }
+    
+    
+     public function category_search($id) {
+        if ($id > 0){
+         $query = $this->db->get_where('book_categories', array('book_catid' => $id));
+            if($query->num_rows() == 1){
+                return $query->result_array();
+            }else{
+                return array();
+            }
+        }else{
+            return array();
+        }
+       
+    }
 }
