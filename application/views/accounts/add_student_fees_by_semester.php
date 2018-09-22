@@ -7,8 +7,8 @@
         var semester_id = document.getElementById('semester_id').value;
         var session_id = document.getElementById('session_id').value;
         var tbodyid = document.getElementById('fee_purposeList');
-        
-        tbodyid.innerHTML = '';
+
+        tbodyid.innerHTML = ''; 
         if (program_id > 0 && semester_id > 0 && session_id > 0) {
             $.ajax({
                 type: "POST",
@@ -28,6 +28,7 @@
                     var thtr = document.createElement('tr');
                     var _td = document.createElement('td');
                     _td.setAttribute('colspan', '3');
+
                     if (lengthJson > 0) {
                         _td.innerHTML = "<h3 class='text-center'>Select Fee Purpose List</h3>";
                         thtr.appendChild(_td);
@@ -37,10 +38,7 @@
                         var creTbody = document.createElement('tbody');
 
                         for (var m = 0; m < dataJson.length; m++) {
-                            // alert(dataJson[m].s_id);
-
                             var creTr = document.createElement('tr');
-
                             for (var n = 1; n < 5; n++) {
 
                                 var ctrTd = document.createElement('td');
@@ -74,7 +72,6 @@
                             }
                             creTbody.appendChild(creTr);
 
-
                             SL++;
                         }
                         creTbl.appendChild(creTbody);
@@ -85,8 +82,7 @@
                         creThead.appendChild(thtr);
                         creTbl.appendChild(creThead);
                         tbodyid.appendChild(creTbl);
-                    }
-
+                    } 
                 }
             });
         }
@@ -165,31 +161,4 @@
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
-</div>
-
-
-<script>
-    $(document).ready(function () {
-
-        $("#addNewRow").on("click", function () {
-            var newRow = $("<tr>");
-            var cols = "";
-
-            cols += '<td><select class="form-control section_id" id="session_id" name="purpose_id[]"> <option value="">Select Purpose</option>  <?php for ($i = 0; $i < sizeof($fee_purpose); $i++) { ?> <option value="<?php echo $fee_purpose[$i]->purpose_id; ?>" <?php ?> ><?php echo $fee_purpose[$i]->purpose_name; ?></option><?php } ?></select></td>';
-            cols += '<td><input type="text" name="amount[]" required="" class="form-control" style="width: 90%; display: inline-block;"/> <input type="button" class="delete btn btn-md btn-danger "  value="X"></td>';
-
-            newRow.append(cols);
-            $("#fee_purpose_setup").append(newRow);
-            counter++;
-        });
-
-
-
-        $("#fee_purpose_setup").on("click", ".delete", function (event) {
-            $(this).closest("tr").remove();
-        });
-
-
-    });
-
-</script>
+</div> 

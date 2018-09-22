@@ -136,15 +136,19 @@ class Accounts extends CI_Controller {
             $where = array('program_id' => $this->input->post('program_id', true), 'semester_id' => $this->input->post('semester_id', true), 'session_id' => $this->input->post('session_id', true), 'purpose_id' => $pIds[$i]);
             $student_fees_by_semeste = $this->General_model->select_any_where('student_fees_by_semeste', $where);
             if (is_array($student_fees_by_semeste) && sizeof($student_fees_by_semeste) > 0) {
-
-                $this->General_model->update('student_fees_by_semeste', $where, array('status' => '1'));
+                echo $pAmount[$i].'<br/>';
+                $updateData['status'] = '1';
+                $updateData['fees_amount'] = $pAmount[$i];
+                
+                $this->General_model->update('student_fees_by_semeste', $where,$updateData);
+               
             } else {
                 $data['purpose_id'] = $pIds[$i];
                 $data['fees_amount'] = $pAmount[$i];
                 $insertId[] = $this->Accounts_model->save_data('student_fees_by_semeste', $data);
             }
         }
-
+ 
         if ($insertId > 0) {
             $this->session->set_flashdata('success', 'Data add successfull');
             redirect('accounts/add_student_fees_by_semester');
@@ -232,6 +236,99 @@ class Accounts extends CI_Controller {
             $this->session->set_flashdata('error', 'Something Error! Please try again');
             redirect('accounts/addpayment');
         }
+    }
+
+    public function printpayment() {
+        $data['semesters'] = $this->General_model->slect_any_table('semesters');
+        $data['sections'] = $this->General_model->slect_any_table('sessions');
+        $data['programs'] = $this->General_model->slect_any_table('programs');
+        $data['fee_purpose'] = $this->General_model->slect_any_table('account_purpose_list');
+
+
+        $data['sidebar'] = 'sidebar/left-sidebar';
+        $data['page'] = 'accounts/printpayment';
+        $data['title'] = 'Add Student Fees by Semester';
+        $this->load->view('layout', $data);
+    }
+
+    public function printinv() {
+
+        $setting_name = $this->Setting_model->select_setting('Institute', 'settings')['value'];
+
+        $data['Institute'] = $setting_name;
+
+        $logo = $this->Setting_model->select_setting('logo', 'settings')['value'];
+        $data['logo'] = $logo;
+
+
+        $student_id = $this->input->post('student_id', true);
+        $where = array('student_id' => $student_id);
+
+        $studentData = $this->General_model->select_any_where('students', $where);
+        $data['student_info'] = $studentData;
+        $where = array('program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id'], 'status' => 1);
+
+        $data['FeepurposeData'] = $this->General_model->select_any_one_where('student_fees_by_semeste', $where);
+
+        $where = array('program_id' => $studentData['program_id'], 'semester_id' => $studentData['semester_id'], 'session_id' => $studentData['session_id'], 'student_id' => $student_id);
+        $data['pay_amount'] = $this->Accounts_model->select_sum_where('student_account', 'cr_amount', $where);
+
+
+        $data['sidebar'] = 'sidebar/left-sidebar';
+        $data['page'] = 'accounts/payPrint';
+        $data['title'] = 'Add Student Fees by Semester';
+        $this->load->view('layout', $data);
+    }
+
+    public function allpaymentfrm() {
+        $data['semesters'] = $this->General_model->slect_any_table('semesters');
+        $data['sections'] = $this->General_model->slect_any_table('sessions');
+        $data['programs'] = $this->General_model->slect_any_table('programs');
+        $data['fee_purpose'] = $this->General_model->slect_any_table('account_purpose_list');
+
+
+        $data['sidebar'] = 'sidebar/left-sidebar';
+        $data['page'] = 'accounts/allpaymentcheck';
+        $data['title'] = 'Add Student Fees by Semester';
+        $this->load->view('layout', $data);
+    }
+
+    public function viewallprint() {
+
+        $setting_name = $this->Setting_model->select_setting('Institute', 'settings')['value'];
+
+        $data['Institute'] = $setting_name;
+
+        $logo = $this->Setting_model->select_setting('logo', 'settings')['value'];
+        $data['logo'] = $logo;
+
+
+        $program_id = $this->input->post('program_id', true);
+        $semester_id = $this->input->post('semester_id', true);
+        $session_id = $this->input->post('session_id', true);
+        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id);
+
+
+
+        $dr_amount_studentList = $this->General_model->select_any_one_where('student_dr_account', $where);
+        if (is_array($dr_amount_studentList) && sizeof($dr_amount_studentList) == NULL) {
+            $this->session->set_flashdata('error', 'Something Error! Please try again');
+            redirect('accounts/allpaymentfrm');
+        }
+        $data['dr_amount_studentList'] = $dr_amount_studentList;
+
+        $studentData = $this->General_model->select_any_one_where('students', $where);
+        $data['allstudent_info'] = $studentData; 
+        
+        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id,'status'=>'1');
+         $student_dr_amount = $this->Accounts_model->select_sum_where('student_fees_by_semeste', 'fees_amount', $where);
+        
+        $data['student_dr_amount'] = $student_dr_amount[0]->fees_amount;
+        
+        $data['sidebar'] = 'sidebar/left-sidebar';
+        $data['page'] = 'accounts/payStudentlist';
+        $data['title'] = 'Add Student Fees by Semester';
+        $this->load->view('layout', $data);
     }
 
 }

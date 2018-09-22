@@ -243,6 +243,8 @@ class Ajax extends CI_Controller {
         exit;
     }
 
+    
+    /*
     function fetch() {
         $output = '';
         $query = '';
@@ -293,6 +295,11 @@ class Ajax extends CI_Controller {
 
         echo json_encode($jsonData);
         exit;
-    }
+    }*/
+    
+    
+ public function searchStudent(){
+     echo $this->input->post('student_id',true);
+ }
 
 }

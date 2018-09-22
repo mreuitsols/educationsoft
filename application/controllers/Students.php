@@ -14,6 +14,7 @@ class Students extends CI_Controller {
         $this->load->model('Student_model');
         $this->load->model('Subject_model');
         $this->load->model('User_model');
+        $this->load->model('Accounts_model');
     }
 
     public function index() {
@@ -59,14 +60,23 @@ class Students extends CI_Controller {
         }
 
         $id = $this->input->post('s_id', true);
-        $saveData['student_id'] = $this->input->post('student_id', true);
+        $student_id = $this->input->post('student_id', true);
+        $saveData['student_id'] = $student_id;
+
         $saveData['faculty_id'] = $this->input->post('faculty_id', true);
         $saveData['department_id'] = $this->input->post('department_id', true);
         $saveData['curriculum_id'] = $this->input->post('curriculum_id', true);
-        $saveData['program_id'] = $this->input->post('program_id', true);
-        $saveData['session_id'] = $this->input->post('session', true);
-        $saveData['semester_id'] = $this->input->post('semester', true);
-        $saveData['section_id'] = $this->input->post('section', true);
+
+        $program_id = $this->input->post('program_id', true);
+        $saveData['program_id'] = $program_id;
+
+        $session_id = $this->input->post('session', true);
+        $saveData['session_id'] = $session_id;
+        $semester_id = $this->input->post('semester', true);
+        $saveData['semester_id'] = $semester_id;
+        $section_id = $this->input->post('section', true);
+        $saveData['section_id'] = $section_id;
+
         $saveData['user_id'] = $_SESSION['user_id'];
         $saveData['student_name'] = $this->input->post('student_name', true);
         $saveData['gender'] = $this->input->post('gender', true);
@@ -114,7 +124,25 @@ class Students extends CI_Controller {
             $saveData['photo'] = $filename;
         }
 
-        $student_id = $this->Student_model->save($saveData, $id);
+        $student_ins_id = $this->Student_model->save($saveData, $id);
+
+
+        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id, 'student_id' => $student_id);
+        $studentBalance = $this->General_model->select_any_where('student_dr_account', $where);
+
+        $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id);
+        $student_fees_by_semeste = $this->Accounts_model->select_sum_where('student_fees_by_semeste', 'fees_amount', $where);
+
+        if (is_array($studentBalance) && sizeof($studentBalance) > 0) {
+            $where = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id, 'student_id' => $student_id);
+            $this->General_model->update('student_dr_account', $where, array('dr_amount' => $student_fees_by_semeste[0]->fees_amount));
+        } else {
+
+
+            $data = array('program_id' => $program_id, 'semester_id' => $semester_id, 'session_id' => $session_id, 'student_id' => $student_id, 'dr_amount' => $student_fees_by_semeste[0]->fees_amount);
+            $insertId = $this->Accounts_model->save_data('student_dr_account', $data);
+        }
+
 
 //        Users Tables Data
         $saveUserDat['username'] = $this->input->post('student_id', true);
@@ -125,6 +153,9 @@ class Students extends CI_Controller {
         $saveUserDat['status'] = 'active';
 
         $successQuery = $this->User_model->save($saveUserDat);
+
+
+
 
         if ($successQuery) {
             $this->session->set_flashdata('success', 'Add Student Successfull');
@@ -146,7 +177,7 @@ class Students extends CI_Controller {
         $data['sections'] = $this->General_model->slect_any_table('sections');
         $data['programs'] = $this->General_model->slect_any_table('programs');
         $data['faculty'] = $this->General_model->slect_any_table('faculty');
-        
+
         $data['sidebar'] = 'sidebar/left-sidebar';
         $data['page'] = 'student/addNewStudent';
         $data['title'] = 'Add Student';

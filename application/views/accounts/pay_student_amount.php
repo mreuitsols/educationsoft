@@ -66,12 +66,7 @@
                                 <div class="form-group">
                                     <label for="ProgramName">Pay Amount</label>
                                     <input type="text" name="pay_amount" class="form-control" id="pay_amount" value="0"/> 
-                                </div>  
-
-                                <div class="form-group">
-                                    <label for="ProgramName">Due Amount</label>
-                                    <input type="text" name="due_amount" class="form-control" id="total" /> 
-                                </div>   
+                                </div>    
                                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
                             </form>
                         </div> 

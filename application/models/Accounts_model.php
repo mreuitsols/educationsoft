@@ -24,5 +24,11 @@ class Accounts_model extends CI_Model {
         $queryData = $this->db->get($table);
         return $queryData->result();
     }
+    public function select_sum_where_row($table, $sumColomn, $where) {
+        $this->db->select_sum($sumColomn);
+        $this->db->where($where);
+        $queryData = $this->db->get($table);
+        return $queryData->row_array();
+    }
 
 }

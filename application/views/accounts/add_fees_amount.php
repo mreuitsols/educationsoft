@@ -26,7 +26,7 @@
                             <form action="<?php echo base_url(); ?>accounts/save_fees_amount" method="post">
                                 <div class="form-group">
                                     <label for="program_id">Program Name</label>
-                                    <select class="form-control program_id" id="program_id" name="program_id">
+                                    <select class="form-control program_id" id="program_id" onchange="getPurposeList()" name="program_id">
                                         <option value="">Select Program</option>
                                         <?php for ($i = 0; $i < sizeof($programs); $i++) { ?>
                                             <option value="<?php echo $programs[$i]->program_id; ?>" <?php ?> ><?php echo $programs[$i]->program_name; ?></option><?php }
@@ -35,7 +35,7 @@
                                 </div> 
                                 <div class="form-group">
                                     <label for="semester_id">Semester</label>
-                                    <select class="form-control semester_id" id="semester_id" name="semester_id">
+                                    <select class="form-control semester_id" id="semester_id" onchange="getPurposeList()" name="semester_id">
                                         <option value="">Select Semester</option>
                                         <?php for ($i = 0; $i < sizeof($semesters); $i++) { ?>
                                             <option value="<?php echo $semesters[$i]->semester_id; ?>" <?php ?> ><?php echo $semesters[$i]->semester_name; ?></option><?php }
@@ -44,7 +44,7 @@
                                 </div> 
                                 <div class="form-group">
                                     <label for="session_id">Section</label>
-                                    <select class="form-control section_id" id="session_id" name="session_id">
+                                    <select class="form-control section_id" id="session_id" onchange="getPurposeList()" name="session_id">
                                         <option value="">Select Section</option>
                                         <?php for ($i = 0; $i < sizeof($sections); $i++) { ?>
                                             <option value="<?php echo $sections[$i]->session_id; ?>" <?php ?> ><?php echo $sections[$i]->year; ?></option><?php }
@@ -54,39 +54,42 @@
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                       
-                                        <table class="table" id="fee_purpose_setup">
-                                            <tr>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <label for="session_id">Fee Purpose</label>
-                                                        <select class="form-control section_id" id="session_id" name="purpose_id[]">
-                                                            <option value="">Select Purpose</option>
-                                                            <?php for ($i = 0; $i < sizeof($fee_purpose); $i++) { ?>
-                                                                <option value="<?php echo $fee_purpose[$i]->purpose_id; ?>" <?php ?> ><?php echo $fee_purpose[$i]->purpose_name; ?></option><?php }
-                                                            ?>
-                                                        </select>  
-                                                    </div>
-                                                </td>
-                                                <td class="" style="width: 50%">
-                                                    <div class="form-group">
-                                                        <label for="session_id">Fee Amount</label>
-                                                        <input type="text" name="amount[]" required="" class="form-control" placeholder="amount" style="width: 90%; display: inline-block;"/>
 
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <table class="table">
+                                            <tbody  id="fee_purpose_setup">
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="session_id">Fee Purpose</label>
+                                                            <select class="form-control purpose" onchange="retypeCheck(this);" name="purpose_id[]">
+                                                                <option value="">Select Purpose</option>
+                                                                <?php for ($i = 0; $i < sizeof($fee_purpose); $i++) { ?>
+                                                                    <option value="<?php echo $fee_purpose[$i]->purpose_id; ?>" <?php ?> ><?php echo $fee_purpose[$i]->purpose_name; ?></option><?php }
+                                                                ?>
+                                                            </select>  
+                                                        </div>
+                                                    </td>
+                                                    <td class="" style="width: 50%">
+                                                        <div class="form-group">
+                                                            <label for="session_id">Fee Amount</label>
+                                                            <input type="text" name="amount[]" required="" class="form-control" placeholder="amount" style="width: 90%; display: inline-block;"/>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
 
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="5" style="text-align: left;">
-                                                         <input type="button" value="+ Add New" id="addNewRow" class="btn btn-primary btn-md pull-right"  style="" /> 
+                                                        <input type="button" value="+ Add New" onclick="addrow();" id="addNewRow" class="btn btn-primary btn-md pull-right"  style="" /> 
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                        <div id="old-data"></div>
 
                                     </div>
                                 </div>
@@ -104,65 +107,106 @@
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
-</div>
-
+</div> 
 
 <script>
-    $(document).ready(function () {
-  
-    $("#addNewRow").on("click", function () {
-        var newRow = $("<tr>");
-        var cols = "";
 
-        cols += '<td><select class="form-control section_id" id="session_id" name="purpose_id[]"> <option value="">Select Purpose</option>  <?php for ($i = 0; $i < sizeof($fee_purpose); $i++) { ?> <option value="<?php echo $fee_purpose[$i]->purpose_id; ?>" <?php ?> ><?php echo $fee_purpose[$i]->purpose_name; ?></option><?php } ?></select></td>';
-        cols += '<td><input type="text" name="amount[]" required="" class="form-control" style="width: 90%; display: inline-block;"/> <input type="button" class="delete btn btn-md btn-danger "  value="X"></td>'; 
- 
+
+    function addrow() {
+        var newRow = document.createElement('tr');
+        var newRow1 = document.createElement('tr');
+        var tbodyId = document.getElementById('fee_purpose_setup');
+        var cols = document.createElement('td');
+
+        cols.innerHTML = '<select class="form-control purpose" id="" onchange="retypeCheck(this);" name="purpose_id[]"> <option value="">Select Purpose</option>  <?php for ($i = 0; $i < sizeof($fee_purpose); $i++) { ?> <option value="<?php echo $fee_purpose[$i]->purpose_id; ?>" <?php ?> ><?php echo $fee_purpose[$i]->purpose_name; ?></option><?php } ?></select>';
+        var cols2 = document.createElement('td');
+        cols2.innerHTML = '<input type="text" name="amount[]" required="" class="form-control" style="width: 90%; display: inline-block;"/> <input type="button" class="delete btn btn-md btn-danger " onclick="rowdelete(this);"  value="X">';
+
         newRow.append(cols);
-        $("#fee_purpose_setup").append(newRow);
-        counter++;
-    });
-
-
-
-    $("#fee_purpose_setup").on("click", ".delete", function (event) {
-        $(this).closest("tr").remove();    
-    });
- 
-
-    });
- 
-</script>
-
-
-<script>
-    $(document).ready(function () {
-
-        //iterate through each textboxes and add keyup
-        //handler to trigger sum event
-        $(".txt").each(function () {
-
-            $(this).keyup(function () {
-                calculateSum();
-            });
-        });
-
-    });
-
-    function calculateSum() {
-
-        var sum = 0;
-        //iterate through each textboxes and add the values
-        $(".txt").each(function () {
-
-            //add only if the value is number
-            if (!isNaN(this.value) && this.value.length != 0) {
-                sum += parseFloat(this.value);
-            }
-
-        });
-        //.toFixed() method will roundoff the final sum to 2 decimal places
-
-
-        $("#total").val(sum.toFixed(2));
+        newRow.append(cols2);
+        tbodyId.appendChild(newRow);
     }
+//    var evt;
+//        function retypeCheck(evt) { 
+//        totalInput=document.getElementsByClassName('purpose');
+//        
+//        for (i = 0; i < totalInput.length; i++)
+//        {
+//          
+//            if (totalInput[i].value == evt.value)
+//            {
+//                 alert('already exits');
+//            }
+//        }  
+//    }
+
+
+    function rowdelete(btn) {
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+    
+    
+    function getPurposeList() {
+
+        var program_id = document.getElementById('program_id').value;
+        var semester_id = document.getElementById('semester_id').value;
+        var session_id = document.getElementById('session_id').value;
+        var tbodyid = document.getElementById('old-data');
+
+        tbodyid.innerHTML = ''; 
+        if (program_id > 0 && semester_id > 0 && session_id > 0) {
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>ajax/select_fees_purpose/", //here we are calling our user controller and get_cities method with the country_id
+                data: {'program_id': program_id, 'semester_id': semester_id, 'session_id': session_id},
+                dataType: 'text',
+                success: function (dataView) {
+
+                    var dataJson = JSON.parse(dataView);
+                    var lengthJson = JSON.parse(dataView).length;
+
+                    var SL = 1;
+                    var creTbl = document.createElement('table');
+                    creTbl.setAttribute('class', 'table table-bordered');
+
+                    var creThead = document.createElement('thead');
+                    var thtr = document.createElement('tr');
+                    var _td = document.createElement('td');
+                    _td.setAttribute('colspan', '3');
+
+                    if (lengthJson > 0) {
+                        _td.innerHTML = "<h3 class='text-center'>Previous Data List</h3>";
+                        thtr.appendChild(_td);
+                        creThead.appendChild(thtr);
+                        creTbl.appendChild(creThead);
+
+                        var creTbody = document.createElement('tbody');
+
+                        for (var m = 0; m < dataJson.length; m++) {
+                            var creTr = document.createElement('tr');
+                            for (var n = 1; n < 4; n++) {
+
+                                var ctrTd = document.createElement('td');
+                                if (n == 1) {
+                                    ctrTd.innerHTML = SL;
+                                } else if (n == 2) {
+                                    ctrTd.innerHTML = dataJson[m].purpose_name;
+                                } else if (n == 3) {
+                                    ctrTd.innerHTML = dataJson[m].amount;
+                                }
+                                creTr.appendChild(ctrTd);
+                            }
+                            creTbody.appendChild(creTr);
+
+                            SL++;
+                        }
+                        creTbl.appendChild(creTbody);
+                        tbodyid.appendChild(creTbl);
+                    }  
+                }
+            });
+        }
+    }
+
 </script>

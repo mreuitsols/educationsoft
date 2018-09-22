@@ -302,6 +302,9 @@ h1, h2, h3, h4, h5, h6 {
 .transcript-header th{
     padding: 5px;
 }
+table.table-bordered th:last-child, table.table-bordered td:last-child {
+	border-right-width: 1px !important;
+}
 @media print
 {
     .drictor{ 
