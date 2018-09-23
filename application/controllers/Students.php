@@ -188,7 +188,7 @@ class Students extends CI_Controller {
         if ($_SESSION['role'] == "student" || $_SESSION ['role'] == "teacher") {
             redirect('/');
         }
-        $where = array('program_id' => $this->input->post('program_id'), 'section_id' => $this->input->post('section_id'), 'semester_id' => $this->input->post('semester_id'), 'session_id' => $this->input->post('session_id'));
+        $where = array('program_id' => $this->input->post('program_id'), 'section_id' => $this->input->post('section_id'), 'semester_id' => $this->input->post('semester_id'), 'session_id' => $this->input->post('session_id'),'status'=>'0');
 
         $studentData = $this->General_model->select_any_one_where('students', $where);
         $data['students'] = $studentData;

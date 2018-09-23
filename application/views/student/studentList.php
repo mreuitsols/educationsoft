@@ -18,10 +18,10 @@
         });
     });
 
-//    setInterval(function () {
-//        onload_data();
-//        onload_data_deactive();
-//    }, 300);
+    setInterval(function () {
+        onload_data();
+        onload_data_deactive();
+    }, 300);
 
     function onload_data() {
         var lastId = document.getElementById('tbodyid');
@@ -93,34 +93,79 @@
                     //alert(dataJson[m]);
                     var editId = document.getElementById("tr__" + dataJson[m].s_id);
                     //alert(editId);
-                    if (editId.style.display == "none") {
-                        editId.style.display = "";
-                    } else if(dataJson[m].status == '1'){
-                        editId.style.display = "none";
-                    }
-                    var tdTr = editId.getElementsByTagName('td');
-
-                    for (var n = 0; n < tdTr.length; n++) {
-                        var ctrTd = tdTr[n];
-                        // alert(ctrTd);
-                        if (n == 0) {
-                            //ctrTd.innerHTML = SL;
-                        } else if (n == 1) {
-                            ctrTd.innerHTML = dataJson[m].username;
-                        } else if (n == 2) {
-                            ctrTd.innerHTML = dataJson[m].student_id;
-                        } else if (n == 3) {
-                            ctrTd.innerHTML = dataJson[m].student_name;
-                        } else if (n == 4) {
-                            ctrTd.innerHTML = dataJson[m].mobile_no;
-                        } else if (n == 5) {
-                            ctrTd.innerHTML = dataJson[m].email;
-                        } else if (n == 6) {
-                            ctrTd.innerHTML = 'ff';
+                    if(editId){
+                        if (editId.style.display == "none") {
+                            //editId.style.display = "";
+                        } else if(dataJson[m].status == '1'){
+                            //editId.style.display = "none";
                         }
+                        var tdTr = editId.getElementsByTagName('td');
 
+                        for (var n = 0; n < tdTr.length; n++) {
+                            var ctrTd = tdTr[n];
+                            // alert(ctrTd);
+                            if (n == 0) {
+                                //ctrTd.innerHTML = SL;
+                            } else if (n == 1) {
+                                ctrTd.innerHTML = dataJson[m].username;
+                            } else if (n == 2) {
+                                ctrTd.innerHTML = dataJson[m].student_id;
+                            } else if (n == 3) {
+                                ctrTd.innerHTML = dataJson[m].student_name;
+                            } else if (n == 4) {
+                                ctrTd.innerHTML = dataJson[m].mobile_no;
+                            } else if (n == 5) {
+                                ctrTd.innerHTML = dataJson[m].email;
+                            } else if (n == 6) {
+                                ctrTd.innerHTML = 'ff';
+                            }
+
+                        }
+                    }else{
+                       // alert(dataJson[m].s_id);
+                       var updateId = dataJson[m].s_id;
+                        var lastId = document.getElementById('tbodyid');
+                        var trList = lastId.getElementsByTagName('tr');
+                        //alert(trList);
+                        var checkId = 0;
+                        var totalTr = trList.length;
+                        for(var m =0; m < totalTr; m++){
+                             var lastTrTag = trList[m].id;
+                             var trSplit = lastTrTag.split('__');
+                             var lastIdData = trSplit[1];
+                             //alert(lastIdData);
+                             if(updateId <  lastIdData && checkId == 0){
+                                console.log(updateId);
+                                  var creTr = document.createElement('tr');
+                                    creTr.setAttribute('id', 'tr__' + dataJson[m].s_id);
+                                    for (var n = 1; n < 8; n++) {
+                                        var ctrTd = document.createElement('td');
+                                        if (n == 1) {
+                                            ctrTd.innerHTML = 1;
+                                        } else if (n == 2) {
+                                            ctrTd.innerHTML = dataJson[m].username;
+                                        } else if (n == 3) {
+                                            ctrTd.innerHTML = dataJson[m].student_id;
+                                        } else if (n == 4) {
+                                            ctrTd.innerHTML = dataJson[m].student_name;
+                                        } else if (n == 5) {
+                                            ctrTd.innerHTML = dataJson[m].mobile_no;
+                                        } else if (n == 6) {
+                                            ctrTd.innerHTML = dataJson[m].email;
+                                        } else if (n == 7) {
+                                            ctrTd.innerHTML = 'ff';
+                                        }
+                                        creTr.appendChild(ctrTd);
+                                    }
+                                    
+                                     var list = document.getElementById("tr__"+lastIdData);
+                                        lastId.insertBefore(creTr, list);
+                                    //lastId.appendChild(creTr);
+                                checkId = 1;
+                             }
+                        }
+                       
                     }
-
 
                 }
             }

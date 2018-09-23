@@ -45,7 +45,7 @@
                                     <td><?= $i + 1; ?></td>
                                     <td><?= $st_info->student_id; ?></td>
                                     <td><?php
-                                        $where = array('program_id' => $st_info->program_id, 'semester_id' => $st_info->semester_id, 'session_id' => $st_info->session_id, 'student_id' => $st_info->student_id);
+                                        $where = array('student_id' =>$st_info->student_id);
                                         $student_name = $this->General_model->select_any_where('students', $where);
                                         echo $student_name['student_name'];
                                         ?></td>

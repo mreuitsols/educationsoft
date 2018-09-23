@@ -244,7 +244,7 @@ class Ajax extends CI_Controller {
     }
 
     
-    /*
+
     function fetch() {
         $output = '';
         $query = '';
@@ -283,6 +283,7 @@ class Ajax extends CI_Controller {
 
     function ajaxGetDeactive() {
         $this->load->model('General_model');
+        
         $students = $this->General_model->slect_any_tableNew1('students');
         //var_dump($students);
         $jsonData = array();
@@ -295,7 +296,7 @@ class Ajax extends CI_Controller {
 
         echo json_encode($jsonData);
         exit;
-    }*/
+    }
     
     
  public function searchStudent(){

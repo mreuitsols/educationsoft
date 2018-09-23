@@ -19,7 +19,7 @@ class General_model extends CI_Model {
     }
 
     public function slect_any_tableNew($table) {
-        $this->db->where('update_status', '1');
+        $this->db->where('update_status', '0');
         $queryData = $this->db->get($table);
         return $queryData->result();
     }
